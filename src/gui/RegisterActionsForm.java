@@ -5,12 +5,20 @@
  */
 package gui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.JOptionPane;
+import model.ActionModel;
+import org.jdesktop.beansbinding.Binding;
+
 /**
  *
  * @author luccas
  */
 public class RegisterActionsForm extends javax.swing.JFrame {
-
+    
+    private List<ActionModel> listAction = new ArrayList();
     /**
      * Creates new form RegisterActionsForm
      */
@@ -26,7 +34,9 @@ public class RegisterActionsForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        actionList = new java.util.ArrayList<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         actionsTable = new javax.swing.JTable();
         actionNameLabel = new javax.swing.JLabel();
@@ -36,24 +46,29 @@ public class RegisterActionsForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        actionsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, actionList, actionsTable, "actionTableBinding");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${actionName}"));
+        columnBinding.setColumnName("Action Name");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane1.setViewportView(actionsTable);
 
         actionNameLabel.setText("Action Name:");
 
         saveActionButton.setText("Save");
+        saveActionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionButtonActionPerformed(evt);
+            }
+        });
 
         deleteActionButton.setText("Delete");
+        deleteActionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,16 +105,69 @@ public class RegisterActionsForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        bindingGroup.bind();
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void saveActionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionButtonActionPerformed
+        // Add to list a new ActionModel
+        if(actionTextField.getText() == null || "".equals(actionTextField.getText()) ) {
+            /*Field is void alert*/
+            JOptionPane.showMessageDialog(rootPane, "Action Name is void");
+        }
+        else {
+            /*Create action and add to list*/
+            ActionModel action = new ActionModel();
+            action.setActionName(actionTextField.getText());
+            listAction.add(action);
+            refreshTable();
+            /*Clean actionTextField*/
+            actionTextField.setText("");
+        }
+    }//GEN-LAST:event_saveActionButtonActionPerformed
+
+    private void deleteActionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionButtonActionPerformed
+        // Delete selected action.
+        int selectedRow = actionsTable.getSelectedRow();
+        int selectedColumn = actionsTable.getSelectedColumn();
+        
+        /*TODO: Check if user has selected*/
+        
+        /*Get selected string*/
+        String selectedValue = (String) actionsTable.getValueAt(selectedRow, selectedColumn);
+        
+        int selectedValueIndex = 0;
+        for (ActionModel a : listAction) {
+            if(a.getActionName().equals(selectedValue)) {
+                break;
+            }
+            selectedValueIndex ++;
+        }
+        /*Delete */
+        if(!listAction.isEmpty()) {
+            listAction.remove(selectedValueIndex);
+            refreshTable();
+        }
+    }//GEN-LAST:event_deleteActionButtonActionPerformed
+
+    private void refreshTable() {
+        Binding b = bindingGroup.getBinding("actionTableBinding");
+        b.unbind();
+        actionList.clear();
+        actionList.addAll(listAction);
+        b.bind();
+        actionsTable.repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.util.ArrayList<ActionModel> actionList;
     private javax.swing.JLabel actionNameLabel;
     private javax.swing.JTextField actionTextField;
     private javax.swing.JTable actionsTable;
     private javax.swing.JButton deleteActionButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton saveActionButton;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

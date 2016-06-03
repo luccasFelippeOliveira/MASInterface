@@ -11,6 +11,7 @@ package gui;
  */
 public class MainEx extends javax.swing.JFrame {
 
+    private RegisterActionsForm registerActionsForm = null;
     /**
      * Creates new form MainEx
      */
@@ -52,6 +53,11 @@ public class MainEx extends javax.swing.JFrame {
         initMenu.add(jMenuItem1);
 
         registerActionsSubMenu.setText("Register Actions");
+        registerActionsSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerActionsSubMenuActionPerformed(evt);
+            }
+        });
         initMenu.add(registerActionsSubMenu);
 
         registerObjectsSubMenu.setText("Register Objects");
@@ -106,6 +112,14 @@ public class MainEx extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void registerActionsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionsSubMenuActionPerformed
+        // Create RegisterActionsForm
+        if(registerActionsForm == null) {
+            registerActionsForm = new RegisterActionsForm();
+        }
+        registerActionsForm.setVisible(true);
+    }//GEN-LAST:event_registerActionsSubMenuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

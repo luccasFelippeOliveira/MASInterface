@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="confliictsScrollPane" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="languageScrollPane" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="normLanguageLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="numberNormLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="numberNormsTextField" min="-2" pref="33" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="conflictsType1Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="conflictsType2Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="conflictsType3Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="conflictsType4Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="allConflictsButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="18" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="conflictsLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="numberConflictsLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="numberConflictsTextField" min="-2" pref="33" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="normLanguageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numberNormLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numberNormsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="languageScrollPane" min="-2" pref="124" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="conflictsType1Button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="conflictsType2Button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="conflictsType3Button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="conflictsType4Button" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="allConflictsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="conflictsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numberConflictsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numberConflictsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="confliictsScrollPane" min="-2" pref="124" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="normLanguageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Norm Languge:"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="languageScrollPane">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextPane" name="languageTextPane">
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JLabel" name="numberNormLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Number of Norms:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="numberNormsTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="conflictsType1Button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Conflicts Type I"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="conflictsType2Button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Conflicts Type II"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="conflictsType3Button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Conflicts Type III"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="conflictsType4Button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Conflicts Type IV"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="allConflictsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="All Conflicts"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="conflictsLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Conflicts"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="confliictsScrollPane">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextPane" name="conflictsTextPane">
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JLabel" name="numberConflictsLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Number of Conflicts"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="numberConflictsTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

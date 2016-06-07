@@ -12,6 +12,9 @@ package gui;
 public class MainEx extends javax.swing.JFrame {
 
     private RegisterActionsForm registerActionsForm = null;
+    private RegisterObjectForm registerObjectForm = null;
+    private AttributeValueForm attributeValueForm = null;
+    private BNFNormsForm bnfNormsForm = null;
     /**
      * Creates new form MainEx
      */
@@ -61,9 +64,19 @@ public class MainEx extends javax.swing.JFrame {
         initMenu.add(registerActionsSubMenu);
 
         registerObjectsSubMenu.setText("Register Objects");
+        registerObjectsSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerObjectsSubMenuActionPerformed(evt);
+            }
+        });
         initMenu.add(registerObjectsSubMenu);
 
         jMenuItem2.setText("Register Attributes and Values");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         initMenu.add(jMenuItem2);
 
         mainMenuBar.add(initMenu);
@@ -71,6 +84,11 @@ public class MainEx extends javax.swing.JFrame {
         regtisterAttrAndValSubMenu.setText("Operations");
 
         conflictsBNFSubMenu.setText("Conflicts Usnig BNF");
+        conflictsBNFSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                conflictsBNFSubMenuActionPerformed(evt);
+            }
+        });
         regtisterAttrAndValSubMenu.add(conflictsBNFSubMenu);
 
         conflictsOntologySubMenu.setText("Conflicts Using Ontology");
@@ -120,6 +138,30 @@ public class MainEx extends javax.swing.JFrame {
         }
         registerActionsForm.setVisible(true);
     }//GEN-LAST:event_registerActionsSubMenuActionPerformed
+
+    private void registerObjectsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerObjectsSubMenuActionPerformed
+        // Cretate RegisterObjectForm
+        if(registerObjectForm == null) {
+            registerObjectForm = new RegisterObjectForm();
+        }
+        registerObjectForm.setVisible(true);
+    }//GEN-LAST:event_registerObjectsSubMenuActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // Create AttributeValueForm
+        if(attributeValueForm == null) {
+            attributeValueForm = new AttributeValueForm();
+        }
+        attributeValueForm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void conflictsBNFSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsBNFSubMenuActionPerformed
+        // Create BNF form
+        if(bnfNormsForm == null) {
+            bnfNormsForm = new BNFNormsForm();
+        }
+        bnfNormsForm.setVisible(true);
+    }//GEN-LAST:event_conflictsBNFSubMenuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

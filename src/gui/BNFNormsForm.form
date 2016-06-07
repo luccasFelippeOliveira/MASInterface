@@ -112,6 +112,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTextPane" name="languageTextPane">
+          <Events>
+            <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="languageTextPaneCaretUpdate"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -130,6 +133,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Conflicts Type I"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conflictsType1ButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="conflictsType2Button">
       <Properties>

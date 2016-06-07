@@ -5,6 +5,20 @@
  */
 package gui;
 
+import analisador.lexico.LexicalAnalyser;
+import analisador.lexico.TokenStream;
+import analisador.sintatico.SyntacticAnalyser;
+import analisador.sintatico.SyntacticErrorException;
+import analisador.sintatico.UnexpectedEndOfInputException;
+import java.awt.Color;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.JOptionPane;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 /**
  *
  * @author luccas
@@ -47,6 +61,11 @@ public class BNFNormsForm extends javax.swing.JFrame {
 
         normLanguageLabel.setText("Norm Languge:");
 
+        languageTextPane.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                languageTextPaneCaretUpdate(evt);
+            }
+        });
         languageScrollPane.setViewportView(languageTextPane);
 
         numberNormLabel.setText("Number of Norms:");
@@ -55,6 +74,11 @@ public class BNFNormsForm extends javax.swing.JFrame {
         numberNormsTextField.setEnabled(false);
 
         conflictsType1Button.setText("Conflicts Type I");
+        conflictsType1Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                conflictsType1ButtonActionPerformed(evt);
+            }
+        });
 
         conflictsType2Button.setText("Conflicts Type II");
 
@@ -143,6 +167,50 @@ public class BNFNormsForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
+    private void languageTextPaneCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_languageTextPaneCaretUpdate
+        // Caret Update
+        
+            
+    }//GEN-LAST:event_languageTextPaneCaretUpdate
+
+    private void conflictsType1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType1ButtonActionPerformed
+        verifyNorm();
+    }//GEN-LAST:event_conflictsType1ButtonActionPerformed
+
+    private boolean verifyNorm() {
+        /*TODO: Add verification code*/
+        String[] norms = languageTextPane.getText().split("\n");
+        LexicalAnalyser la;
+        for(String norm : norms) {
+            la = new LexicalAnalyser(norm);
+            TokenStream ts = la.getTokenStream();
+            
+            SyntacticAnalyser sa = new SyntacticAnalyser(ts);
+            try {
+                sa.doSyntaxAnalysis();
+            }
+            catch(SyntacticErrorException se) {
+                JOptionPane.showMessageDialog(rootPane, "Error: " + se);
+            }
+            catch(UnexpectedEndOfInputException eie) {
+                JOptionPane.showMessageDialog(rootPane, "Error: " + eie);
+            }
+            
+        }
+        return true;
+    }
+
+    private int countNorms() {
+        int numberNorms = 0; 
+        String text = languageTextPane.getText();
+        if ("".equals(text) || text == null) {
+            numberNorms = 0;
+        } else {
+            numberNorms = text.split("\n").length;
+            /*Quatidade de linhas*/
+        }
+        return numberNorms;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton allConflictsButton;
     private javax.swing.JLabel conflictsLabel;

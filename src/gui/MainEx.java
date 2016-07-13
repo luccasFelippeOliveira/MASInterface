@@ -15,6 +15,7 @@ public class MainEx extends javax.swing.JFrame {
     private RegisterObjectForm registerObjectForm = null;
     private AttributeValueForm attributeValueForm = null;
     private BNFNormsForm bnfNormsForm = null;
+    private CRUDNormsForm crudNormsForm = null;
     /**
      * Creates new form MainEx
      */
@@ -53,6 +54,11 @@ public class MainEx extends javax.swing.JFrame {
         initMenu.setText("Init");
 
         jMenuItem1.setText("CRUD of Norms");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         initMenu.add(jMenuItem1);
 
         registerActionsSubMenu.setText("Register Actions");
@@ -162,6 +168,14 @@ public class MainEx extends javax.swing.JFrame {
         }
         bnfNormsForm.setVisible(true);
     }//GEN-LAST:event_conflictsBNFSubMenuActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // Create CRUD norms form
+        if(crudNormsForm == null) {
+            crudNormsForm = new CRUDNormsForm();
+        }
+        crudNormsForm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

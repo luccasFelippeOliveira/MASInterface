@@ -5,9 +5,9 @@
  */
 package model;
 
+import com.norm.checker.norm.definition.Norm;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -17,6 +17,7 @@ public class Services {
     private static List<ActionModel> actionModelList = null;
     private static List<ObjectModel> objectModelList = null;
     private static List<AttributeModel> attributeModelList = null;
+    private static List<Norm> normModelList = null;
     
     
     private Services() {
@@ -41,6 +42,12 @@ public class Services {
             attributeModelList = new ArrayList<AttributeModel>();
         }
         return attributeModelList;
+    }
+    public static List<Norm> getNormModelList() {
+        if(normModelList == null) {
+            normModelList = new ArrayList<Norm> ();
+        }
+        return normModelList;
     }
     
 }

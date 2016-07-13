@@ -5,12 +5,14 @@
  */
 package model;
 
+
 /**
  * Represents a action.
  * @author lfo
  */
 public class ActionModel {
     private String actionName;
+    
 
     public String getActionName() {
         return actionName;

@@ -5,19 +5,27 @@
  */
 package gui;
 
-import analisador.lexico.LexicalAnalyser;
-import analisador.lexico.TokenStream;
-import analisador.sintatico.SyntacticAnalyser;
 import analisador.sintatico.SyntacticErrorException;
 import analisador.sintatico.UnexpectedEndOfInputException;
-import java.awt.Color;
-import java.util.concurrent.ThreadLocalRandom;
+import com.norm.checker.conflict.checker.ConflictChecker;
+import com.norm.checker.norm.definition.Norm;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import compilation.Compiler;
+import java.util.Map;
 import javax.swing.JOptionPane;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
+import model.ConflictModel;
+import org.jdesktop.beansbinding.Binding;
 
 /**
  *
@@ -25,10 +33,17 @@ import javax.swing.text.StyledDocument;
  */
 public class BNFNormsForm extends javax.swing.JFrame {
 
+    private List<Norm> boundNorms = null;
+    private Map<String, List<Norm>> normClassification;
+    private ConflictChecker checker = new ConflictChecker();
+    private List<ConflictModel> boundConflicts = null;
+
     /**
      * Creates new form BNFNormsForm
      */
     public BNFNormsForm() {
+        boundNorms = new ArrayList<Norm>();
+        boundConflicts = new ArrayList<ConflictModel>();
         initComponents();
     }
 
@@ -40,10 +55,11 @@ public class BNFNormsForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        normsList = new java.util.ArrayList<>();
+        conflictsList = new java.util.ArrayList<>();
         normLanguageLabel = new javax.swing.JLabel();
-        languageScrollPane = new javax.swing.JScrollPane();
-        languageTextPane = new javax.swing.JTextPane();
         numberNormLabel = new javax.swing.JLabel();
         numberNormsTextField = new javax.swing.JTextField();
         conflictsType1Button = new javax.swing.JButton();
@@ -52,21 +68,18 @@ public class BNFNormsForm extends javax.swing.JFrame {
         conflictsType4Button = new javax.swing.JButton();
         allConflictsButton = new javax.swing.JButton();
         conflictsLabel = new javax.swing.JLabel();
-        confliictsScrollPane = new javax.swing.JScrollPane();
-        conflictsTextPane = new javax.swing.JTextPane();
         numberConflictsLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        normTable = new javax.swing.JTable();
         numberConflictsTextField = new javax.swing.JTextField();
+        importNormsButton = new javax.swing.JButton();
+        insertNormButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        conflictsTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        normLanguageLabel.setText("Norm Languge:");
-
-        languageTextPane.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                languageTextPaneCaretUpdate(evt);
-            }
-        });
-        languageScrollPane.setViewportView(languageTextPane);
+        normLanguageLabel.setText("Norms ");
 
         numberNormLabel.setText("Number of Norms:");
 
@@ -81,72 +94,136 @@ public class BNFNormsForm extends javax.swing.JFrame {
         });
 
         conflictsType2Button.setText("Conflicts Type II");
+        conflictsType2Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                conflictsType2ButtonActionPerformed(evt);
+            }
+        });
 
         conflictsType3Button.setText("Conflicts Type III");
 
         conflictsType4Button.setText("Conflicts Type IV");
 
         allConflictsButton.setText("All Conflicts");
+        allConflictsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allConflictsButtonActionPerformed(evt);
+            }
+        });
 
         conflictsLabel.setText("Conflicts");
 
-        confliictsScrollPane.setViewportView(conflictsTextPane);
-
         numberConflictsLabel.setText("Number of Conflicts");
+
+        normTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, normsList, normTable, "normBinding");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deonticConcept}"));
+        columnBinding.setColumnName("Deontic Concept");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.DeonticConcept.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${behavior}"));
+        columnBinding.setColumnName("Behavior");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.BehaviorMultipleParameters.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${entity}"));
+        columnBinding.setColumnName("Entity");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Entity.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${context}"));
+        columnBinding.setColumnName("Context");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Context.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${activationConstraint}"));
+        columnBinding.setColumnName("Activation Constraint");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Constraint.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deactivationConstraint}"));
+        columnBinding.setColumnName("Deactivation Constraint");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Constraint.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane1.setViewportView(normTable);
 
         numberConflictsTextField.setText("0");
         numberConflictsTextField.setEnabled(false);
+
+        importNormsButton.setText("Import Norms From File");
+        importNormsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importNormsButtonActionPerformed(evt);
+            }
+        });
+
+        insertNormButton.setText("Insert Norms");
+
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conflictsList, conflictsTable, "conflictBinding");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${conflictedNorms}"));
+        columnBinding.setColumnName("Conflicted Norms");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane2.setViewportView(conflictsTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(confliictsScrollPane)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(languageScrollPane)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(normLanguageLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(numberNormLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numberNormsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(conflictsType1Button)
-                        .addGap(18, 18, 18)
-                        .addComponent(conflictsType2Button)
-                        .addGap(18, 18, 18)
-                        .addComponent(conflictsType3Button)
-                        .addGap(18, 18, 18)
-                        .addComponent(conflictsType4Button)
-                        .addGap(18, 18, 18)
-                        .addComponent(allConflictsButton)
-                        .addGap(0, 18, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(normLanguageLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(numberNormLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(numberNormsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(12, 12, 12))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(conflictsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(numberConflictsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numberConflictsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7))))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(importNormsButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(insertNormButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(conflictsType1Button)
+                                .addGap(18, 18, 18)
+                                .addComponent(conflictsType2Button)
+                                .addGap(18, 18, 18)
+                                .addComponent(conflictsType3Button)
+                                .addGap(18, 18, 18)
+                                .addComponent(conflictsType4Button)
+                                .addGap(18, 18, 18)
+                                .addComponent(allConflictsButton)))
+                        .addContainerGap(23, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(importNormsButton)
+                    .addComponent(insertNormButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(normLanguageLabel)
                     .addComponent(numberNormLabel)
                     .addComponent(numberNormsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(languageScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(conflictsType1Button)
                     .addComponent(conflictsType2Button)
@@ -158,74 +235,157 @@ public class BNFNormsForm extends javax.swing.JFrame {
                     .addComponent(conflictsLabel)
                     .addComponent(numberConflictsLabel)
                     .addComponent(numberConflictsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(confliictsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void languageTextPaneCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_languageTextPaneCaretUpdate
-        // Caret Update
-        
-            
-    }//GEN-LAST:event_languageTextPaneCaretUpdate
-
     private void conflictsType1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType1ButtonActionPerformed
-        verifyNorm();
+        /*Checa conflitos de Normas tipo1*/
     }//GEN-LAST:event_conflictsType1ButtonActionPerformed
 
-    private boolean verifyNorm() {
-        /*TODO: Add verification code*/
-        String[] norms = languageTextPane.getText().split("\n");
-        LexicalAnalyser la;
-        for(String norm : norms) {
-            la = new LexicalAnalyser(norm);
-            TokenStream ts = la.getTokenStream();
-            
-            SyntacticAnalyser sa = new SyntacticAnalyser(ts);
-            try {
-                sa.doSyntaxAnalysis();
+    private void importNormsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importNormsButtonActionPerformed
+        /*Create file dialog, interpret as text, send as String list to compiler*/
+ /*Create file dialog*/
+        File selectedFile = null;
+        JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.home")));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text File", "txt");
+        fileChooser.setFileFilter(filter);
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            /*Gets returned file*/
+            selectedFile = fileChooser.getSelectedFile();
+
+            String file = "";
+            /*Open File*/
+            try (InputStream in = Files.newInputStream(selectedFile.toPath());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    file += line;
+                    file += "\n";/*Read line cut \n*/
+                }
+            } catch (FileNotFoundException f) {
+                f.printStackTrace();
+            } catch (IOException i) {
+                i.printStackTrace();
             }
-            catch(SyntacticErrorException se) {
-                JOptionPane.showMessageDialog(rootPane, "Error: " + se);
+            /*Create List*/
+            if (!"".equals(file)) {
+                /*There is norms*/
+                List<String> importedNorms = new ArrayList<String>();
+                importedNorms.addAll(Arrays.asList(file.split("\n")));
+
+                /*Send to compiler*/
+                Compiler comp = new Compiler();
+                try {
+                    if (boundNorms != null) {
+                        boundNorms.addAll(comp.compileList(importedNorms));
+                    }
+                } catch (SyntacticErrorException s) {
+                    JOptionPane.showMessageDialog(rootPane, "Error while importing norms: " + s);
+                } catch (UnexpectedEndOfInputException u) {
+                    JOptionPane.showMessageDialog(rootPane, "Error while importing norms: " + u);
+                }
             }
-            catch(UnexpectedEndOfInputException eie) {
-                JOptionPane.showMessageDialog(rootPane, "Error: " + eie);
-            }
-            
         }
-        return true;
+        
+        refreshNormTable();
+    }//GEN-LAST:event_importNormsButtonActionPerformed
+
+    private void conflictsType2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType2ButtonActionPerformed
+        
+    }//GEN-LAST:event_conflictsType2ButtonActionPerformed
+
+    private void allConflictsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allConflictsButtonActionPerformed
+        /*Check for all conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(boundNorms);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        System.out.println("Size of conflictSet" + Integer.toString(conflictSet.size()));
+        /*Add conflicts*/
+        for(List<Norm> l : conflictSet) {
+            /*Create ConflictModel*/
+            long[] conflicts = new long[l.size()];
+            int i = 0;
+            for(Norm n: l) {
+                conflicts[i] = n.getId();
+                i++;
+            }
+            ConflictModel model = new ConflictModel(conflicts);
+            boundConflicts.add(model);
+        }
+        refreshConflictTable();
+    }//GEN-LAST:event_allConflictsButtonActionPerformed
+
+    private void refreshNormTable() {
+        Binding b = bindingGroup.getBinding("normBinding");
+        b.unbind();
+        normsList.clear();
+        normsList.addAll(boundNorms);
+        b.bind();
+        normTable.repaint();
+        numberNormsTextField.setText(Integer.toString(normsList.size()));
+    }
+    
+    private void refreshConflictTable() {
+        Binding b = bindingGroup.getBinding("conflictBinding");
+        b.unbind();
+        conflictsList.clear();
+        conflictsList.addAll(boundConflicts);
+        b.bind();
+        conflictsTable.repaint();
+        numberConflictsTextField.setText(Integer.toString(conflictsList.size()));
     }
 
-    private int countNorms() {
-        int numberNorms = 0; 
-        String text = languageTextPane.getText();
-        if ("".equals(text) || text == null) {
-            numberNorms = 0;
-        } else {
-            numberNorms = text.split("\n").length;
-            /*Quatidade de linhas*/
+    /**Classifica as normas em tipo1,... tipo 4; Usa metodo transformado em
+     * publico de ConflictChecker.
+     */
+    private void classifyNorms() {
+        normClassification = checker.classifyNorms(boundNorms);
+    }
+
+    private void printNorms(List<List<Norm>> norms, String msg) {
+        for (List<Norm> list : norms) {
+            for (Norm norm : list) {
+                System.out.println(norm.toString());
+            }
+            System.out.println();
         }
-        return numberNorms;
+        System.out.println("\n*****************************************************");
+        if (msg != null) {
+            System.out.println(msg);
+        }
+        System.out.println("The total of conflicts found was " + norms.size() + ".");
+        System.out.println("*****************************************************");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton allConflictsButton;
     private javax.swing.JLabel conflictsLabel;
-    private javax.swing.JTextPane conflictsTextPane;
+    private java.util.ArrayList<ConflictModel> conflictsList;
+    private javax.swing.JTable conflictsTable;
     private javax.swing.JButton conflictsType1Button;
     private javax.swing.JButton conflictsType2Button;
     private javax.swing.JButton conflictsType3Button;
     private javax.swing.JButton conflictsType4Button;
-    private javax.swing.JScrollPane confliictsScrollPane;
-    private javax.swing.JScrollPane languageScrollPane;
-    private javax.swing.JTextPane languageTextPane;
+    private javax.swing.JButton importNormsButton;
+    private javax.swing.JButton insertNormButton;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel normLanguageLabel;
+    private javax.swing.JTable normTable;
+    private java.util.ArrayList<Norm> normsList;
     private javax.swing.JLabel numberConflictsLabel;
     private javax.swing.JTextField numberConflictsTextField;
     private javax.swing.JLabel numberNormLabel;
     private javax.swing.JTextField numberNormsTextField;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

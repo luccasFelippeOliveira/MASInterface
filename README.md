@@ -13,5 +13,5 @@ It is possible to download the mentioned libraries from:
 https://drive.google.com/open?id=0B0t9LVvY-NfeWW1idElLLUpMLTA
 
 ##To use:
-  *Compile program using Netbeans or editing build-impl.xml and running ant with buil.xml.
-  *Execute the created jar.
+  1) Compile program using Netbeans or editing build-impl.xml and running ant with buil.xml.
+  2) Execute the created jar.

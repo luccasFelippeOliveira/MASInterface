@@ -25,6 +25,7 @@ import compilation.Compiler;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import model.ConflictModel;
+import model.Services;
 import org.jdesktop.beansbinding.Binding;
 
 /**
@@ -42,7 +43,7 @@ public class BNFNormsForm extends javax.swing.JFrame {
      * Creates new form BNFNormsForm
      */
     public BNFNormsForm() {
-        boundNorms = new ArrayList<Norm>();
+        boundNorms = Services.getNormModelList();
         boundConflicts = new ArrayList<ConflictModel>();
         initComponents();
     }
@@ -101,8 +102,18 @@ public class BNFNormsForm extends javax.swing.JFrame {
         });
 
         conflictsType3Button.setText("Conflicts Type III");
+        conflictsType3Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                conflictsType3ButtonActionPerformed(evt);
+            }
+        });
 
         conflictsType4Button.setText("Conflicts Type IV");
+        conflictsType4Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                conflictsType4ButtonActionPerformed(evt);
+            }
+        });
 
         allConflictsButton.setText("All Conflicts");
         allConflictsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -154,6 +165,11 @@ public class BNFNormsForm extends javax.swing.JFrame {
         });
 
         insertNormButton.setText("Insert Norms");
+        insertNormButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertNormButtonActionPerformed(evt);
+            }
+        });
 
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, conflictsList, conflictsTable, "conflictBinding");
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${conflictedNorms}"));
@@ -247,7 +263,12 @@ public class BNFNormsForm extends javax.swing.JFrame {
 
 
     private void conflictsType1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType1ButtonActionPerformed
-        /*Checa conflitos de Normas tipo1*/
+        clearNormTable();
+        List<Norm> type1Norms = normClassification.get(TYPE1);
+        
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type1Norms);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        displayConflicts(conflictSet);
     }//GEN-LAST:event_conflictsType1ButtonActionPerformed
 
     private void importNormsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importNormsButtonActionPerformed
@@ -297,34 +318,61 @@ public class BNFNormsForm extends javax.swing.JFrame {
                 }
             }
         }
-        
+        normClassification = checker.classifyNorms(boundNorms);
         refreshNormTable();
     }//GEN-LAST:event_importNormsButtonActionPerformed
 
     private void conflictsType2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType2ButtonActionPerformed
+        clearNormTable();
+        /*Verify type 2 norms*/
+        List<Norm> type2Norms = normClassification.get(TYPE2);
         
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type2Norms);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        displayConflicts(conflictSet);
     }//GEN-LAST:event_conflictsType2ButtonActionPerformed
 
     private void allConflictsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allConflictsButtonActionPerformed
+        clearNormTable();
         /*Check for all conflicts*/
         List<List<Norm>> normSet = checker.classifyNormsInSets(boundNorms);
         List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        conflictSet.addAll(checker.checkForConflictsEqualTypes(normSet));
+        conflictSet.addAll(checker.getTheMinimumConflictsList(normSet));
         System.out.println("Size of conflictSet" + Integer.toString(conflictSet.size()));
         /*Add conflicts*/
-        for(List<Norm> l : conflictSet) {
-            /*Create ConflictModel*/
-            long[] conflicts = new long[l.size()];
-            int i = 0;
-            for(Norm n: l) {
-                conflicts[i] = n.getId();
-                i++;
-            }
-            ConflictModel model = new ConflictModel(conflicts);
-            boundConflicts.add(model);
-        }
-        refreshConflictTable();
+        displayConflicts(conflictSet);
     }//GEN-LAST:event_allConflictsButtonActionPerformed
 
+    private void conflictsType3ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType3ButtonActionPerformed
+        clearNormTable();
+        List<Norm> type3Norms = normClassification.get(TYPE3);
+        
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type3Norms);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        displayConflicts(conflictSet);
+    }//GEN-LAST:event_conflictsType3ButtonActionPerformed
+
+    private void conflictsType4ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsType4ButtonActionPerformed
+        clearNormTable();
+        List<Norm> type4Norms = normClassification.get(TYPE4);
+        
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type4Norms);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        displayConflicts(conflictSet);
+    }//GEN-LAST:event_conflictsType4ButtonActionPerformed
+
+    private void insertNormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertNormButtonActionPerformed
+        /*Create New WriteNormDialog*/
+        WriteNormDialog wr = new WriteNormDialog(this, true);
+        wr.setVisible(true);
+        /*Reload normTable*/
+        refreshNormTable();
+    }//GEN-LAST:event_insertNormButtonActionPerformed
+
+    private void clearNormTable() {
+        boundConflicts.clear();
+    }
     private void refreshNormTable() {
         Binding b = bindingGroup.getBinding("normBinding");
         b.unbind();
@@ -345,13 +393,7 @@ public class BNFNormsForm extends javax.swing.JFrame {
         numberConflictsTextField.setText(Integer.toString(conflictsList.size()));
     }
 
-    /**Classifica as normas em tipo1,... tipo 4; Usa metodo transformado em
-     * publico de ConflictChecker.
-     */
-    private void classifyNorms() {
-        normClassification = checker.classifyNorms(boundNorms);
-    }
-
+    
     private void printNorms(List<List<Norm>> norms, String msg) {
         for (List<Norm> list : norms) {
             for (Norm norm : list) {
@@ -366,6 +408,27 @@ public class BNFNormsForm extends javax.swing.JFrame {
         System.out.println("The total of conflicts found was " + norms.size() + ".");
         System.out.println("*****************************************************");
     }
+    
+    private void displayConflicts (List<List<Norm>> conflictSet) {
+        for(List<Norm> l : conflictSet) {
+            /*Create ConflictModel*/
+            long[] conflicts = new long[l.size()];
+            int i = 0;
+            for(Norm n: l) {
+                conflicts[i] = n.getId();
+                i++;
+            }
+            ConflictModel model = new ConflictModel(conflicts);
+            boundConflicts.add(model);
+        }
+        refreshConflictTable();
+    }
+    
+    private final String TYPE1 = "type1";
+    private final String TYPE2 = "type2";
+    private final String TYPE3 = "type3";
+    private final String TYPE4 = "type4";
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton allConflictsButton;
     private javax.swing.JLabel conflictsLabel;

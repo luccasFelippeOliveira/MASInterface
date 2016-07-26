@@ -26,7 +26,8 @@ public class ValueModel {
     }
     @Override
     public String toString() {
-        return this.owner.getAttributeName() + "{ " + this.value + " }";
+        //return this.owner.getAttributeName() + "{ " + this.value + " }";
+        return this.value;
     }
     
 }

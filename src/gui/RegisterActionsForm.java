@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.ActionModel;
+import model.Services;
 import org.jdesktop.beansbinding.Binding;
 
 /**
@@ -18,12 +19,13 @@ import org.jdesktop.beansbinding.Binding;
  */
 public class RegisterActionsForm extends javax.swing.JFrame {
     
-    private List<ActionModel> listAction = new ArrayList();
+    private List<ActionModel> listAction = null;
     /**
      * Creates new form RegisterActionsForm
      */
     public RegisterActionsForm() {
         initComponents();
+        listAction = Services.getActionModelList();
     }
 
     /**

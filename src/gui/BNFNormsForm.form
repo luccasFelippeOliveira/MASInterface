@@ -163,11 +163,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Conflicts Type III"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conflictsType3ButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="conflictsType4Button">
       <Properties>
         <Property name="text" type="java.lang.String" value="Conflicts Type IV"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conflictsType4ButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="allConflictsButton">
       <Properties>
@@ -294,6 +300,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Insert Norms"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insertNormButtonActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
       <AuxValues>

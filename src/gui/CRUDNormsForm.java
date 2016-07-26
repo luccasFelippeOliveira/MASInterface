@@ -5,9 +5,35 @@
  */
 package gui;
 
+import com.norm.checker.conflict.checker.ConflictChecker;
+import com.norm.checker.norm.definition.BehaviorMultipleParameters;
+import com.norm.checker.norm.definition.Constraint;
+import com.norm.checker.norm.definition.ConstraintDate;
+import com.norm.checker.norm.definition.ConstraintType;
+import com.norm.checker.norm.definition.Context;
+import com.norm.checker.norm.definition.ContextType;
+import com.norm.checker.norm.definition.DeonticConcept;
+import com.norm.checker.norm.definition.Entity;
+import com.norm.checker.norm.definition.EntityType;
 import com.norm.checker.norm.definition.Norm;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import model.ActionModel;
+import model.AttributeModel;
+import model.ConflictModel;
+import model.ObjectModel;
 import model.Services;
+import model.ValueModel;
+import org.jdesktop.beansbinding.Binding;
 
 /**
  *
@@ -15,13 +41,37 @@ import model.Services;
  */
 public class CRUDNormsForm extends javax.swing.JFrame {
 
-    private List<Norm> normList = null;
+    private List<Norm> normBoundList = null;
+    private DefaultMutableTreeNode root = null;
+    private DefaultTreeModel model = null;
+    private int idCount = 1;
+    private NormType normType = NormType.TYPE4;
+    private Map<String, List<Norm>> normClassification;
+    private ConflictChecker checker = new ConflictChecker();
     /**
      * Creates new form CRUDNormsForm
      */
     public CRUDNormsForm() {
-        normList = Services.getNormModelList();
+        normBoundList = Services.getNormModelList();
         initComponents();
+        
+        /*Create tree*/
+        root = new DefaultMutableTreeNode("Attributes and Values");
+        model = new DefaultTreeModel(root, true);
+        
+        attributeValuesTree.setModel(model);
+        
+        /*Initialize List components*/
+        initializeDeontic();
+        initializeContext();
+        initializeEntity();
+        initializeAction();
+        initializeObjects();
+        
+        reloadNormTable();
+        
+        updateCount(false);
+        
     }
 
     /**
@@ -32,8 +82,10 @@ public class CRUDNormsForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         typeButtonGroup = new javax.swing.ButtonGroup();
+        normList = new java.util.ArrayList<>();
         type1RadioButton = new javax.swing.JRadioButton();
         type3RadioButton = new javax.swing.JRadioButton();
         type2RadioButton = new javax.swing.JRadioButton();
@@ -43,7 +95,7 @@ public class CRUDNormsForm extends javax.swing.JFrame {
         deonticConceptLabel = new javax.swing.JLabel();
         deonticConceptComboBox = new javax.swing.JComboBox<>();
         contextTimeLabel = new javax.swing.JLabel();
-        deonticConceptComboBox1 = new javax.swing.JComboBox<>();
+        contextTypeComboBox = new javax.swing.JComboBox<>();
         entityTypeLabel = new javax.swing.JLabel();
         entityTypeComboBox = new javax.swing.JComboBox<>();
         activationDateLabel = new javax.swing.JLabel();
@@ -64,7 +116,7 @@ public class CRUDNormsForm extends javax.swing.JFrame {
         saveButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        normTable = new javax.swing.JTable();
         clearTableButton = new javax.swing.JButton();
         clearRowButton = new javax.swing.JButton();
         conflicts1Button = new javax.swing.JButton();
@@ -74,6 +126,8 @@ public class CRUDNormsForm extends javax.swing.JFrame {
         conflictsAllButton = new javax.swing.JButton();
         addAttributeButton = new javax.swing.JButton();
         addValueButton = new javax.swing.JButton();
+        codeLabel = new javax.swing.JLabel();
+        codeTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -112,13 +166,15 @@ public class CRUDNormsForm extends javax.swing.JFrame {
 
         idLabel.setText("id");
 
+        idTextField.setEditable(false);
+
         deonticConceptLabel.setText("Deontic Concept");
 
         deonticConceptComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         contextTimeLabel.setText("Context Type");
 
-        deonticConceptComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        contextTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         entityTypeLabel.setText("Entity Type");
 
@@ -144,6 +200,7 @@ public class CRUDNormsForm extends javax.swing.JFrame {
 
         objectLabel.setText("Object");
 
+        attributeValuesTree.setModel(null);
         jScrollPane1.setViewportView(attributeValuesTree);
 
         jLabel1.setText("Attributes and Values");
@@ -162,18 +219,28 @@ public class CRUDNormsForm extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, normList, normTable, "normBindigGroup");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deonticConcept}"));
+        columnBinding.setColumnName("Deontic Concept");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${behavior}"));
+        columnBinding.setColumnName("Behavior");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${entity}"));
+        columnBinding.setColumnName("Entity");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${context}"));
+        columnBinding.setColumnName("Context");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${activationConstraint}"));
+        columnBinding.setColumnName("Activation Constraint");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deactivationConstraint}"));
+        columnBinding.setColumnName("Deactivation Constraint");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${code}"));
+        columnBinding.setColumnName("Code");
+        columnBinding.setColumnClass(Long.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane2.setViewportView(normTable);
 
         clearTableButton.setText("Clear Table");
         clearTableButton.addActionListener(new java.awt.event.ActionListener() {
@@ -238,6 +305,8 @@ public class CRUDNormsForm extends javax.swing.JFrame {
             }
         });
 
+        codeLabel.setText("Code");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -261,32 +330,10 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(addValueButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(addAttributeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(idLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(284, 284, 284)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(deactivationDateLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(deactivationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(activationDateLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(activationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(type1RadioButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(type2RadioButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(type3RadioButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(type4RadioButton))
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,7 +345,7 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                             .addComponent(contextTimeLabel)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(deonticConceptComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(contextTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                             .addComponent(deonticConceptLabel)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -325,8 +372,34 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(saveButton)
                                 .addGap(18, 18, 18)
-                                .addComponent(clearButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                                .addComponent(clearButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(type1RadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(type2RadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(type3RadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(type4RadioButton))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(codeLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(codeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(idLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(idTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                                .addGap(130, 130, 130)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(deactivationDateLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(deactivationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(activationDateLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(activationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(conflicts4Button, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(conflicts1Button, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -348,10 +421,13 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(idLabel)
-                            .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(activationDateLabel)
-                            .addComponent(activationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(activationDateFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codeLabel)
+                            .addComponent(codeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(idLabel)
+                                .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(deonticConceptLabel)
@@ -361,7 +437,7 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(contextTimeLabel)
-                            .addComponent(deonticConceptComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(contextTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contextNameLabel)
                             .addComponent(contextNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -409,71 +485,178 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
+        bindingGroup.bind();
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void type4RadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_type4RadioButtonActionPerformed
         /*Set type4 enable*/
         setFormType(NormType.TYPE4);
+        normType = NormType.TYPE4;
     }//GEN-LAST:event_type4RadioButtonActionPerformed
 
     private void type3RadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_type3RadioButtonActionPerformed
         /*Set type3 enable*/
         setFormType(NormType.TYPE3);
+        normType = NormType.TYPE3;
     }//GEN-LAST:event_type3RadioButtonActionPerformed
 
     private void type2RadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_type2RadioButtonActionPerformed
         /*Set type2 enable*/
         setFormType(NormType.TYPE2);
+        normType = NormType.TYPE2;
     }//GEN-LAST:event_type2RadioButtonActionPerformed
 
     private void type1RadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_type1RadioButtonActionPerformed
         /*Set type1 enable*/
         setFormType(NormType.TYPE1);
+        normType = NormType.TYPE1;
     }//GEN-LAST:event_type1RadioButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         /*Save norm*/
+        Norm norm = createNorm();
+        /*Add norm to list*/
+        normBoundList.add(norm);
+        /*Update Norms*/
+        reloadNormTable();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         /*Clear Form*/
+        activationDateFormattedTextField.setText("");
+        deactivationDateFormattedTextField.setText("");
+        contextNameTextField.setText("");
+        entitytNameTextField.setText("");
+        /*Clear Tree*/
+        root.removeAllChildren();
+        model.reload();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void clearRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearRowButtonActionPerformed
         /*Clear row*/
+        int index = normTable.getSelectedRow();
+        normBoundList.remove(index);
+        reloadNormTable();
     }//GEN-LAST:event_clearRowButtonActionPerformed
 
     private void clearTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearTableButtonActionPerformed
         /*Clear Table*/
+        normBoundList.clear();
+        reloadNormTable();
     }//GEN-LAST:event_clearTableButtonActionPerformed
 
     private void conflicts1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflicts1ButtonActionPerformed
         /*Check conflict type 1*/
+        /*Classify Norms*/
+        normClassification = checker.classifyNorms(normBoundList);
+        List<Norm> type1 = normClassification.get(TYPE1);
+        
+        /*Get conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type1);
+        List<List<Norm>> conflicts = checker.checkForConflictsEqualTypes(normSet);
+        List<ConflictModel> conflictList = createConflicts(conflicts);
+        
+        /*Dialog*/
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
     }//GEN-LAST:event_conflicts1ButtonActionPerformed
 
     private void conflicts2ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflicts2ButtonActionPerformed
         /*Check conflict type 2*/
+        
+        /*Classify Norms*/
+        normClassification = checker.classifyNorms(normBoundList);
+        List<Norm> type2 = normClassification.get(TYPE2);
+        
+        /*Get conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type2);
+        List<List<Norm>> conflicts = checker.checkForConflictsEqualTypes(normSet);
+        List<ConflictModel> conflictList = createConflicts(conflicts);
+        
+        /*Dialog*/
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
     }//GEN-LAST:event_conflicts2ButtonActionPerformed
 
     private void conflicts3ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflicts3ButtonActionPerformed
         /*Check conflict type 3*/
+        /*Classify Norms*/
+        normClassification = checker.classifyNorms(normBoundList);
+        List<Norm> type3 = normClassification.get(TYPE3);
+        
+        /*Get conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type3);
+        List<List<Norm>> conflicts = checker.checkForConflictsEqualTypes(normSet);
+        List<ConflictModel> conflictList = createConflicts(conflicts);
+        
+        /*Dialog*/
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
     }//GEN-LAST:event_conflicts3ButtonActionPerformed
 
     private void conflicts4ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflicts4ButtonActionPerformed
         /*Check conflict type 4*/
+        /*Classify Norms*/
+        normClassification = checker.classifyNorms(normBoundList);
+        List<Norm> type4 = normClassification.get(TYPE4);
+        
+        /*Get conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(type4);
+        List<List<Norm>> conflicts = checker.checkForConflictsEqualTypes(normSet);
+        List<ConflictModel> conflictList = createConflicts(conflicts);
+        
+        /*Dialog*/
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
     }//GEN-LAST:event_conflicts4ButtonActionPerformed
 
     private void conflictsAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsAllButtonActionPerformed
         /*Check All conflicts*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(normBoundList);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        conflictSet.addAll(checker.checkForConflictsEqualTypes(normSet));
+        conflictSet.addAll(checker.getTheMinimumConflictsList(normSet));
+        
+        List<ConflictModel> conflictList = createConflicts(conflictSet);
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
+        
     }//GEN-LAST:event_conflictsAllButtonActionPerformed
 
     private void addAttributeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAttributeButtonActionPerformed
         /*Add attribute*/
+        AttributeModel answer = null;
+        AddAttributeDialog dialog = new AddAttributeDialog(this, true, answer);
+        dialog.setVisible(true);
+        answer = dialog.getAnswer();
+        //System.out.println(answer);
+        
+        if(answer != null) {
+            DefaultMutableTreeNode attribute = new DefaultMutableTreeNode(answer, true);
+            model.insertNodeInto(attribute, root, root.getChildCount());
+        }
     }//GEN-LAST:event_addAttributeButtonActionPerformed
 
     private void addValueButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addValueButtonActionPerformed
-        /*Add Value*/
+        ValueModel value = null;
+        
+        TreePath path = attributeValuesTree.getSelectionPath();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+        
+        if(selectedNode.equals(root)) return;
+        
+        AttributeModel attribute = (AttributeModel) selectedNode.getUserObject();
+        AddValueDialog dialog = new AddValueDialog(this, true, attribute);
+        dialog.setVisible(true);
+        value = dialog.getValueModel();
+        
+        if(value != null) {
+            DefaultMutableTreeNode valueNode = new DefaultMutableTreeNode(value, false);
+            model.insertNodeInto(valueNode, selectedNode, selectedNode.getChildCount());
+        }
+        
     }//GEN-LAST:event_addValueButtonActionPerformed
     
     private void setFormType(NormType type) {
@@ -509,10 +692,162 @@ public class CRUDNormsForm extends javax.swing.JFrame {
                 break;
         }
     }
-
+    
+    private void initializeDeontic() {
+        /*Erase everything*/
+        deonticConceptComboBox.removeAllItems();
+        for(DeonticConcept deontic : DeonticConcept.values()) {
+            deonticConceptComboBox.addItem(deontic.name());
+        }
+    }
+    
+    private void initializeContext() {
+        contextTypeComboBox.removeAllItems();
+        for(ContextType context : ContextType.values()) {
+            contextTypeComboBox.addItem(context.name());
+        }
+    }
+    
+    private void initializeEntity() {
+        entityTypeComboBox.removeAllItems();
+        for(EntityType context : EntityType.values()) {
+            entityTypeComboBox.addItem(context.name());
+        }
+    }
+    
+    private void initializeAction() {
+        List<ActionModel> actions = Services.getActionModelList();
+        System.out.println(actions.size());
+        actionComboBox.removeAllItems();
+        for(ActionModel action : actions) {
+            actionComboBox.addItem(action.getActionName());
+        }
+    }
+    
+    private void initializeObjects() {
+        List<ObjectModel> objects = Services.getObjectModelList();
+        objectComboBox.removeAllItems();
+        for(ObjectModel object : objects) {
+            objectComboBox.addItem(object.getObjectName());
+        }
+    }
+    
+    private void updateCount(boolean add) {
+        idTextField.setText(Integer.toString(idCount));
+        if(add) idCount++;
+    }
+    
+    private Norm createNorm() {
+        long code = Long.parseLong(codeTextField.getText());
+        
+        DeonticConcept deonticConcept = DeonticConcept.valueOf(deonticConceptComboBox.getItemAt(
+                                                                deonticConceptComboBox.getSelectedIndex()));
+        
+        Context context = new Context(contextNameTextField.getText(), 
+                                      ContextType.valueOf(
+                                              contextTypeComboBox.getItemAt(
+                                                      contextTypeComboBox.getSelectedIndex())));
+        Entity entity = new Entity(entitytNameTextField.getText(),
+                                    EntityType.valueOf(entityTypeComboBox.getItemAt(
+                                                        entityTypeComboBox.getSelectedIndex())));
+        BehaviorMultipleParameters behavior = null;
+        switch(normType) {
+            case TYPE1:
+                behavior = new BehaviorMultipleParameters(actionComboBox.getItemAt(actionComboBox.getSelectedIndex()));
+                break;
+            case TYPE2:
+                behavior = new BehaviorMultipleParameters(actionComboBox.getItemAt(actionComboBox.getSelectedIndex()),
+                                                          objectComboBox.getItemAt(objectComboBox.getSelectedIndex()));
+                break;
+            case TYPE3:
+                behavior = new BehaviorMultipleParameters(actionComboBox.getItemAt(actionComboBox.getSelectedIndex()));
+                /*Interate over tree*/
+                setAttributesAndValues(behavior);
+                break;
+            case TYPE4:
+                behavior = new BehaviorMultipleParameters(actionComboBox.getItemAt(actionComboBox.getSelectedIndex()),
+                                                          objectComboBox.getItemAt(objectComboBox.getSelectedIndex()));
+                setAttributesAndValues(behavior);
+                break;
+        }
+        /*Activation Constraint*/
+        LocalDate activationDate = LocalDate.parse(activationDateFormattedTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        Constraint activationConstraint = new ConstraintDate(ConstraintType.DATETYPE, activationDate);
+        
+        /*Deactivation Constraint*/
+        LocalDate deactivationDate = LocalDate.parse(deactivationDateFormattedTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        Constraint deactivationConstraint = new ConstraintDate(ConstraintType.DATETYPE, deactivationDate);
+        
+        /*Generate Norm*/
+        return new Norm(code, deonticConcept,context, entity, behavior, activationConstraint, deactivationConstraint);
+    }
+    
+    private void setAttributesAndValues(BehaviorMultipleParameters behavior) {
+        /*All attributes have the same parent -> root*/
+        Enumeration enumeration = root.children();
+        List<AttributeModel> attributes = null;
+       
+        if(enumeration.hasMoreElements()) {
+            attributes = new ArrayList<AttributeModel>();
+            
+            while(enumeration.hasMoreElements()) {
+                DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumeration.nextElement();
+                attributes.add((AttributeModel)element.getUserObject());
+            }
+        }
+        
+        if (attributes != null) {
+            for(AttributeModel attribute : attributes) {
+                Set<String> values = new HashSet();
+                for(ValueModel v : attribute.getValues()) {
+                    values.add(v.getValue());
+                }
+                if(values.isEmpty()) {
+                    behavior.addElement(attribute.getAttributeName(), null);
+                }
+                else {
+                    behavior.addSetOfElements(attribute.getAttributeName(), values);
+                }
+            }
+        }
+        
+    }
+    
+    private void reloadNormTable() {
+        Binding b = bindingGroup.getBinding("normBindigGroup");
+        b.unbind();
+        normList.clear();
+        normList.addAll(normBoundList);
+        b.bind();
+        normTable.repaint();
+    }
+    
+    private List<ConflictModel> createConflicts(List<List<Norm>> conflictSet) {
+        List<ConflictModel> conflictList = new ArrayList<ConflictModel>();
+        for(List<Norm> l : conflictSet) {
+            /*Create ConflictModel*/
+            long[] conflicts = new long[l.size()];
+            int i = 0;
+            for(Norm n: l) {
+                conflicts[i] = n.getId();
+                i++;
+            }
+            ConflictModel model = new ConflictModel(conflicts);
+            conflictList.add(model);
+        }
+        return conflictList;                
+    }
+    
+    
     private enum NormType {
         TYPE1, TYPE2, TYPE3, TYPE4
     };
+    
+    private final String TYPE1 = "type1";
+    private final String TYPE2 = "type2";
+    private final String TYPE3 = "type3";
+    private final String TYPE4 = "type4";
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> actionComboBox;
     private javax.swing.JLabel actionLabel;
@@ -524,6 +859,8 @@ public class CRUDNormsForm extends javax.swing.JFrame {
     private javax.swing.JButton clearButton;
     private javax.swing.JButton clearRowButton;
     private javax.swing.JButton clearTableButton;
+    private javax.swing.JLabel codeLabel;
+    private javax.swing.JTextField codeTextField;
     private javax.swing.JButton conflicts1Button;
     private javax.swing.JButton conflicts2Button;
     private javax.swing.JButton conflicts3Button;
@@ -532,10 +869,10 @@ public class CRUDNormsForm extends javax.swing.JFrame {
     private javax.swing.JLabel contextNameLabel;
     private javax.swing.JTextField contextNameTextField;
     private javax.swing.JLabel contextTimeLabel;
+    private javax.swing.JComboBox<String> contextTypeComboBox;
     private javax.swing.JFormattedTextField deactivationDateFormattedTextField;
     private javax.swing.JLabel deactivationDateLabel;
     private javax.swing.JComboBox<String> deonticConceptComboBox;
-    private javax.swing.JComboBox<String> deonticConceptComboBox1;
     private javax.swing.JLabel deonticConceptLabel;
     private javax.swing.JLabel entityNameLabel;
     private javax.swing.JComboBox<String> entityTypeComboBox;
@@ -546,7 +883,8 @@ public class CRUDNormsForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private java.util.ArrayList<Norm> normList;
+    private javax.swing.JTable normTable;
     private javax.swing.JComboBox<String> objectComboBox;
     private javax.swing.JLabel objectLabel;
     private javax.swing.JButton saveButton;
@@ -555,5 +893,6 @@ public class CRUDNormsForm extends javax.swing.JFrame {
     private javax.swing.JRadioButton type3RadioButton;
     private javax.swing.JRadioButton type4RadioButton;
     private javax.swing.ButtonGroup typeButtonGroup;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

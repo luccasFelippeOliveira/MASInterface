@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="java.util.ArrayList" name="normList">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Norm&gt;"/>
+      </AuxValues>
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
@@ -25,32 +32,33 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jLabel1" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane2" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="661" max="32767" attributes="0"/>
+                      <Component id="showConflictsButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" pref="308" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="105" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Component id="showConflictsButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="162" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt; Imagine um sistema multiagente onde existe um conjunto de normas a serem cumpridas em um dom&#xed;nio de vestu&#xe1;rio. Nesse dom&#xed;nio, &lt;br&gt; pode existir normas que obtigam, proibem  e permitem um agente a vestir roupas.&lt;br&gt;&#xa;Essas roupas podem possuir certas caracter&#xed;sticas, &lt;br&gt;&#xa;como uma cor espec&#xed;fica, um material espec&#xed;fico e/ou uma estampa espec&#xed;fica. &lt;br&gt;&#xa;A seguir ser&#xe1;o apresentados alguns exemplos de normas (de cada tipo) que podem ser definidas a partir da sintaxe definida. Como&lt;br&gt;&#xa;exemplo de normas &#xe9; dado: &lt;br&gt;&#xa;TIPO(i) -OBRIGADO vestir &lt;br&gt;&#xa;TIPO(ii) -OBRIGADO vestir camisa&lt;br&gt;&#xa;TIPO(iii) -OBRIGADO vestir(cor = {branca}, estampa={lisa}) &lt;br&gt;&#xa;TIPO(iv) -OBRIGADO vestir camisa (cor = {branca}, estampa={lisa}) &lt;br&gt;"/>
-      </Properties>
-    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -58,19 +66,113 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="normTable">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                <Column editable="true" title="Title 4" type="java.lang.Object"/>
-              </Table>
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+              <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+              </TableColumnModel>
             </Property>
+            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="elements" source="normList" target="normTable" targetPath="elements" updateStrategy="0" immediately="true">
+              <Property name="name" type="java.lang.String" value="exampleNormBinding"/>
+              <Subbinding sourcePath="${id}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Long.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${deonticConcept}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.DeonticConcept.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${behavior}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.BehaviorMultipleParameters.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${entity}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.Entity.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${context}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.Context.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${activationConstraint}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.Constraint.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${deactivationConstraint}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="com.norm.checker.norm.definition.Constraint.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${code}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Long.class"/>
+              </Subbinding>
+            </BindingProperty>
+          </BindingProperties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="descriptionTextArea">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="text" type="java.lang.String" value="The main purpose of this screen is show that the technique can be applicable in real examples. &#xa;&#xa;The paper that represents this technique:&#xa;W. W. Vasconcelos, M. J. Kollingbaum, and T. J. Norman, &#xa;   &#x201c;Normative conflict resolution in multi-agent systems,&#x201d;&#xa;    Auton. Agent. Multi. Agent. Syst., vol. 19, no. 2, pp. 124&#x2013;152, 2009.&#xa;&#xa;&#xa;The scenario described is adapted. A simplified non-combatant evacuation scenario in which software&#xa;agents help humans to coordinate their activities and information sharing. In this scenario &#xa;there are two coalition partners, viz., team A and team B, operating within the same area, but each &#xa;with independent assets. In our scenario, team A have received information that members of a &#xa;non-governmental organization (NGO) are stranded in a hazardous location. Intelligence has confirmed &#xa;that these people must be evacuated to a safe location as soon as possible and that the successful &#xa;completion of this operation takes highest priority.&#xa;&#xa;Team A are based on an aircraft carrier just off the coast and have a number of assets at their disposal, including autonomous unmanned aerial vehicles (AUVs), deployed with sensors to provide on-going visual intelligence for the operation, and helicopters that can be deployed to rescue the NGO workers. Team B are located on land within close distance from the location of the NGO workers. The assets available to team B include ground troops and helicopters.&#xa;&#xa;The most effective plan to complete the rescue mission is to deploy an AUV to provide real-time visual intelligence of the area in which the NGO workers are located, and then to dispatch the helicopter team to uplift the NGO workers and return them to the aircraft carrier. The team A operate under the following norms: obliged to obtain intelligence using AUV; permitted to share intelligence and obliged helicopter to move to the areas 6, 8 and 10. The team B operate under the following norms: permitted helicopter to move to the areas 5, 7 and 9 and forbidden helicopter to move to the areas 6, 13 and 15.&#xa;&#xa;From the use of the intelligence team A was discovered that the workers of NGOs are in the area 6. In addition, it is discovered that the helicopters team A are not sufficient and they need help the team B. However, the team B is not permitted to move to the same area of team A. From this, the team leaders talk and decide a new norm in the environment: permitted helicopters of team A and team B move to the same area.&#xa;&#xa;In the defined notation, these norms can be represented as:&#xa;&#xa;1.       O obtain_intelligence_A AUV&#xa;&#xa;2.       P share_intelligence_A AUV&#xa;&#xa;3.       O move helicopter_A area = {6, 8, 10}&#xa;&#xa;4.       P move helicopter_B area = {5, 7, 9}&#xa;&#xa;5.       F move helicopter_B area = {6, 13, 15}&#xa;&#xa;6.       P move helicopter_A e helicopter_B area = A&#xa;The application of the conflict checker identify a conflict not found in other approaches in the literature. From the presented scenario, there was a multiple conflict in norms 3, 5 and 6. In this case, the first parameter is the deontic concept (O, F and P), the second parameter is the action (move), the third parameter is the object (helicopter_A and helicopter_B) and the last parameter is the attribute (area) with its possible values. The constant &#x201c;A&#x201d; in norm 6 represents that any value is acceptable, but the value should be the same for helicopter_A and helicopter _B."/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="showConflictsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Show Conflicts"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showConflictsButtonActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

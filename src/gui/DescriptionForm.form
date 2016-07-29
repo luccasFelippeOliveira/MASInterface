@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="556" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="369" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="jTextArea1">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="text" type="java.lang.String" value="A norm n &#x2208; Nrm is a tuple of the form:&#xa;&#xa;&#x9;(deoC, c, e, a, ac, dc)&#xa;&#xa;where deoC is a deontic concept from the set {O, F, P}, respectively, obliged, forbidden and permitted; c &#x2208; C is the context where the norm is defined; e &#x2208; E is the entity whose action is being regulated; a &#x2208; A is the action being regulated; ac &#x2208; Cd indicates the condition that activates the norm and dc &#x2208; Cd is the condition that deactivates the norm.&#xa;&#xa;Every norm is defined in the scope of a context. The entity, whose action is being regulated, must fulfill the norm when executing in the context where the norm is being defined. In this paper, we consider that a norm can be defined in the context of an organization o &#x2208; O or of an environment env &#x2208; Env. The set of possible contexts are defined as C = O &#x222a; Env. A norm regulates the action of an agent a &#x2208; Ag, an organization (or group of agents) o &#x2208; O or a role r &#x2208; R. Agents, organizations and roles are entities of the set E = Ag &#x222a; R &#x222a; O.&#xa;&#xa;The activation and deactivation conditions, ac &#x2208; Cd and dc &#x2208; Cd, can state an event that can be a date, the execution of an action, the fulfillment of a norm, etc. In this paper, we will focus on the specification of dates since it is easier to figure out which event has occurred first. Thus, we use simple mathematic symbols such as &#x2264; and &#x2265; to indicate that an event occurs before or after another (&#x2200;n &#x2208; N, ac &#x2264; dc).&#xa;&#xa;An action is defined by the name of the action and, optionally, its attributes and their values, an object where the action will be executed and a list of attributes (with their values). Thus, in this paper we define four different ways to represent the action:&#xa;&#xa;  (i) action;  &#xa;&#xa;  (ii) action object;&#xa;&#xa;  (iii) action (attribute1 = {value1}, attribute2 = {value2}, ...});&#xa;&#xa;  (iv) action object (attribute1 = {value1}, attribute2 = {value2},...}).&#xa;&#xa;The designer of a multi-agent system can set any of the types of norms to represent your domain, these different ways of defining a norm represents a great flexibility in creating a multi-agent system. In order to exemplify these four ways to describe an action, let&apos;s consider the following four prohibition norms:&#xa;&#xa;  (i) Na forbids agent A to study;&#xa;&#xa;  (ii) Nb forbids agent A to study math;&#xa;&#xa;  (iii) Nc forbids agent A to study on Monday;&#xa;&#xa;  (iv) Nd forbids agent A to study Math on Monday.&#xa;&#xa;The actions described in the norms are represented as:&#xa;&#xa;  (i) Na: study;&#xa;&#xa;  (ii) Nb: study math;&#xa;&#xa;  (iii) Nc: study (day={Monday});&#xa;&#xa;  (iv) Nd: study math (day={Monday})."/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

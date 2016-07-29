@@ -11,7 +11,7 @@
     </Component>
   </NonVisualComponents>
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -48,12 +48,9 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="clearTableButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="addValueButton" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="addAttributeButton" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="addValueButton" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="addAttributeButton" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -173,14 +170,16 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="activationDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="activationDateFormattedTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="codeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="idLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="idTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="activationDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="activationDateFormattedTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="codeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>

@@ -5,17 +5,36 @@
  */
 package gui;
 
+import com.norm.checker.conflict.checker.ConflictChecker;
+import com.norm.checker.norm.definition.BehaviorMultipleParameters;
+import com.norm.checker.norm.definition.Constraint;
+import com.norm.checker.norm.definition.Context;
+import com.norm.checker.norm.definition.ContextType;
+import com.norm.checker.norm.definition.DeonticConcept;
+import com.norm.checker.norm.definition.Entity;
+import com.norm.checker.norm.definition.EntityType;
+import com.norm.checker.norm.definition.Norm;
+import java.util.ArrayList;
+import java.util.List;
+import model.ConflictModel;
+import org.jdesktop.beansbinding.Binding;
+
 /**
  *
  * @author luccas
  */
 public class ExampleConflictForm extends javax.swing.JFrame {
 
+    private List<Norm> normBoundList = new ArrayList<Norm>();
+    private ConflictChecker checker = new ConflictChecker();
     /**
      * Creates new form ExampleConflictForm
      */
     public ExampleConflictForm() {
         initComponents();
+        
+        createNorms();
+        reloadNormsTable();
     }
 
     /**
@@ -26,27 +45,59 @@ public class ExampleConflictForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jLabel1 = new javax.swing.JLabel();
+        normList = new java.util.ArrayList<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        normTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        descriptionTextArea = new javax.swing.JTextArea();
+        showConflictsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("<html> Imagine um sistema multiagente onde existe um conjunto de normas a serem cumpridas em um domínio de vestuário. Nesse domínio, <br> pode existir normas que obtigam, proibem  e permitem um agente a vestir roupas.<br>\nEssas roupas podem possuir certas características, <br>\ncomo uma cor específica, um material específico e/ou uma estampa específica. <br>\nA seguir seráo apresentados alguns exemplos de normas (de cada tipo) que podem ser definidas a partir da sintaxe definida. Como<br>\nexemplo de normas é dado: <br>\nTIPO(i) -OBRIGADO vestir <br>\nTIPO(ii) -OBRIGADO vestir camisa<br>\nTIPO(iii) -OBRIGADO vestir(cor = {branca}, estampa={lisa}) <br>\nTIPO(iv) -OBRIGADO vestir camisa (cor = {branca}, estampa={lisa}) <br>");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, normList, normTable, "exampleNormBinding");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deonticConcept}"));
+        columnBinding.setColumnName("Deontic Concept");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.DeonticConcept.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${behavior}"));
+        columnBinding.setColumnName("Behavior");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.BehaviorMultipleParameters.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${entity}"));
+        columnBinding.setColumnName("Entity");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Entity.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${context}"));
+        columnBinding.setColumnName("Context");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Context.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${activationConstraint}"));
+        columnBinding.setColumnName("Activation Constraint");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Constraint.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${deactivationConstraint}"));
+        columnBinding.setColumnName("Deactivation Constraint");
+        columnBinding.setColumnClass(com.norm.checker.norm.definition.Constraint.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${code}"));
+        columnBinding.setColumnName("Code");
+        columnBinding.setColumnClass(Long.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane1.setViewportView(normTable);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        descriptionTextArea.setEditable(false);
+        descriptionTextArea.setColumns(20);
+        descriptionTextArea.setLineWrap(true);
+        descriptionTextArea.setRows(5);
+        descriptionTextArea.setText("The main purpose of this screen is show that the technique can be applicable in real examples. \n\nThe paper that represents this technique:\nW. W. Vasconcelos, M. J. Kollingbaum, and T. J. Norman, \n   “Normative conflict resolution in multi-agent systems,”\n    Auton. Agent. Multi. Agent. Syst., vol. 19, no. 2, pp. 124–152, 2009.\n\n\nThe scenario described is adapted. A simplified non-combatant evacuation scenario in which software\nagents help humans to coordinate their activities and information sharing. In this scenario \nthere are two coalition partners, viz., team A and team B, operating within the same area, but each \nwith independent assets. In our scenario, team A have received information that members of a \nnon-governmental organization (NGO) are stranded in a hazardous location. Intelligence has confirmed \nthat these people must be evacuated to a safe location as soon as possible and that the successful \ncompletion of this operation takes highest priority.\n\nTeam A are based on an aircraft carrier just off the coast and have a number of assets at their disposal, including autonomous unmanned aerial vehicles (AUVs), deployed with sensors to provide on-going visual intelligence for the operation, and helicopters that can be deployed to rescue the NGO workers. Team B are located on land within close distance from the location of the NGO workers. The assets available to team B include ground troops and helicopters.\n\nThe most effective plan to complete the rescue mission is to deploy an AUV to provide real-time visual intelligence of the area in which the NGO workers are located, and then to dispatch the helicopter team to uplift the NGO workers and return them to the aircraft carrier. The team A operate under the following norms: obliged to obtain intelligence using AUV; permitted to share intelligence and obliged helicopter to move to the areas 6, 8 and 10. The team B operate under the following norms: permitted helicopter to move to the areas 5, 7 and 9 and forbidden helicopter to move to the areas 6, 13 and 15.\n\nFrom the use of the intelligence team A was discovered that the workers of NGOs are in the area 6. In addition, it is discovered that the helicopters team A are not sufficient and they need help the team B. However, the team B is not permitted to move to the same area of team A. From this, the team leaders talk and decide a new norm in the environment: permitted helicopters of team A and team B move to the same area.\n\nIn the defined notation, these norms can be represented as:\n\n1.       O obtain_intelligence_A AUV\n\n2.       P share_intelligence_A AUV\n\n3.       O move helicopter_A area = {6, 8, 10}\n\n4.       P move helicopter_B area = {5, 7, 9}\n\n5.       F move helicopter_B area = {6, 13, 15}\n\n6.       P move helicopter_A e helicopter_B area = A\nThe application of the conflict checker identify a conflict not found in other approaches in the literature. From the presented scenario, there was a multiple conflict in norms 3, 5 and 6. In this case, the first parameter is the deontic concept (O, F and P), the second parameter is the action (move), the third parameter is the object (helicopter_A and helicopter_B) and the last parameter is the attribute (area) with its possible values. The constant “A” in norm 6 represents that any value is acceptable, but the value should be the same for helicopter_A and helicopter _B.");
+        jScrollPane2.setViewportView(descriptionTextArea);
+
+        showConflictsButton.setText("Show Conflicts");
+        showConflictsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showConflictsButtonActionPerformed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -54,28 +105,155 @@ public class ExampleConflictForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 661, Short.MAX_VALUE)
+                        .addComponent(showConflictsButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(showConflictsButton)
+                .addContainerGap())
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void showConflictsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showConflictsButtonActionPerformed
+        /*Open Conflict window*/
+        List<List<Norm>> normSet = checker.classifyNormsInSets(normBoundList);
+        List<List<Norm>> conflictSet = checker.checkForConflictsEqualTypes(normSet);
+        conflictSet.addAll(checker.checkForConflictsEqualTypes(normSet));
+        conflictSet.addAll(checker.getTheMinimumConflictsList(normSet));
+        
+        List<ConflictModel> conflictList = createConflicts(conflictSet);
+        ShowConflictDialog dialog = new ShowConflictDialog(this, true, conflictList);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_showConflictsButtonActionPerformed
+
+    private void createNorms() {
+        /*Create Norms*/
+        Context context1 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity1 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action1 = new BehaviorMultipleParameters("obtain_intelligence_A", "UAV");
+        Constraint activation1 = null;
+        Constraint deactivation1 = null;
+        Norm norm1 = new Norm(20l,DeonticConcept.OBLIGATION, context1,entity1, action1,activation1, deactivation1);
+        
+        normBoundList.add(norm1);
+        
+        Context context2 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity2 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action2 = new BehaviorMultipleParameters("share_intelligence_A", "UAV");
+        Constraint activation2 = null;
+        Constraint deactivation2 = null;
+        Norm norm2 = new Norm(20l,DeonticConcept.PERMISSION, context2,entity2, action2,activation2, deactivation2);
+        
+        normBoundList.add(norm2);
+        
+        Context context3 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity3 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action3 = new BehaviorMultipleParameters("move", "helicopter_A");
+        action3.addElement("area", "6");
+        action3.addElement("area", "8");
+        action3.addElement("area", "10");
+        Constraint activation3 = null;
+        Constraint deactivation3 = null;
+        Norm norm3 = new Norm(20l,DeonticConcept.OBLIGATION, context3,entity3, action3,activation3, deactivation3);
+        
+        normBoundList.add(norm3);
+        
+        Context context4 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity4 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action4 = new BehaviorMultipleParameters("move", "helicopter_B");
+        action4.addElement("area", "5");
+        action4.addElement("area", "7");
+        action4.addElement("area", "9");
+        Constraint activation4 = null;
+        Constraint deactivation4 = null;
+        Norm norm4 = new Norm(20l,DeonticConcept.PERMISSION, context4,entity4, action4,activation4, deactivation4);
+        
+        normBoundList.add(norm4);
+        
+        Context context5 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity5 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action5 = new BehaviorMultipleParameters("move", "helicopter_B");
+        action5.addElement("area", "6");
+        action5.addElement("area", "13");
+        action5.addElement("area", "15");
+        Constraint activation5 = null;
+        Constraint deactivation5 = null;
+        Norm norm5 = new Norm(20l,DeonticConcept.PROHIBITION, context5,entity5, action5,activation5, deactivation5);
+        
+        normBoundList.add(norm5);
+        
+        Context context6 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity6 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action6 = new BehaviorMultipleParameters("move", "helicopter_A");
+        action6.addElement("area", "A");
+        Constraint activation6 = null;
+        Constraint deactivation6 = null;
+        Norm norm6 = new Norm(20l,DeonticConcept.PERMISSION, context6,entity6, action6,activation6, deactivation6);
+        
+        normBoundList.add(norm6);
+        
+        Context context7 = new Context("wild", ContextType.ORGANIZATION);
+        Entity entity7 = new Entity("entity", EntityType.ROLE);
+        BehaviorMultipleParameters action7 = new BehaviorMultipleParameters("move", "helicopter_B");
+        action7.addElement("area", "A");
+        Constraint activation7 = null;
+        Constraint deactivation7 = null;
+        Norm norm7 = new Norm(20l,DeonticConcept.PERMISSION, context7,entity7, action7,activation7, deactivation7);
+        
+        normBoundList.add(norm7);
+        
+        reloadNormsTable();
+    }
+    
+    private void reloadNormsTable() {
+        Binding b = bindingGroup.getBinding("exampleNormBinding");
+        b.unbind();
+        normList.clear();
+        normList.addAll(normBoundList);
+        b.bind();
+        normTable.repaint();
+        
+    }
+    
+    private List<ConflictModel> createConflicts(List<List<Norm>> conflictSet) {
+        List<ConflictModel> conflictList = new ArrayList<ConflictModel>();
+        for(List<Norm> l : conflictSet) {
+            /*Create ConflictModel*/
+            long[] conflicts = new long[l.size()];
+            int i = 0;
+            for(Norm n: l) {
+                conflicts[i] = n.getId();
+                i++;
+            }
+            ConflictModel model = new ConflictModel(conflicts);
+            conflictList.add(model);
+        }
+        return conflictList;                
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextArea descriptionTextArea;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private java.util.ArrayList<Norm> normList;
+    private javax.swing.JTable normTable;
+    private javax.swing.JButton showConflictsButton;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

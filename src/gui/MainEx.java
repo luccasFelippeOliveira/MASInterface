@@ -5,6 +5,14 @@
  */
 package gui;
 
+import initialization.Init;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import model.Services;
+
 /**
  *
  * @author luccas
@@ -16,11 +24,19 @@ public class MainEx extends javax.swing.JFrame {
     private AttributeValueForm attributeValueForm = null;
     private BNFNormsForm bnfNormsForm = null;
     private CRUDNormsForm crudNormsForm = null;
+    private ExampleConflictForm exampleConflictForm = null;
+    private DescriptionForm descriptionForm = null;
+    private DevelopersForm developersForm = null;
+    private TechnologiesForm technologiesForm = null;
+
     /**
      * Creates new form MainEx
      */
     public MainEx() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        new Init();
+        System.out.println("Action size" + Services.getActionModelList().size());
     }
 
     /**
@@ -32,6 +48,14 @@ public class MainEx extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainDesktopPane = new javax.swing.JDesktopPane() {
+            Image sized = getSizedImage();
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(sizedImage, 0 ,0, this);
+            }
+        };
         mainMenuBar = new javax.swing.JMenuBar();
         initMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -50,6 +74,23 @@ public class MainEx extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Welcome to MAS Interface");
+
+        mainDesktopPane.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                mainDesktopPaneComponentResized(evt);
+            }
+        });
+
+        javax.swing.GroupLayout mainDesktopPaneLayout = new javax.swing.GroupLayout(mainDesktopPane);
+        mainDesktopPane.setLayout(mainDesktopPaneLayout);
+        mainDesktopPaneLayout.setHorizontalGroup(
+            mainDesktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        mainDesktopPaneLayout.setVerticalGroup(
+            mainDesktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 279, Short.MAX_VALUE)
+        );
 
         initMenu.setText("Init");
 
@@ -101,6 +142,11 @@ public class MainEx extends javax.swing.JFrame {
         regtisterAttrAndValSubMenu.add(conflictsOntologySubMenu);
 
         exampleConflictsSubMenu.setText("Example of Conflicts");
+        exampleConflictsSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exampleConflictsSubMenuActionPerformed(evt);
+            }
+        });
         regtisterAttrAndValSubMenu.add(exampleConflictsSubMenu);
 
         conflictsRandomlySubMenu.setText("Conflicts Ramdomly");
@@ -111,12 +157,27 @@ public class MainEx extends javax.swing.JFrame {
         aboutMenu.setText("About");
 
         descriptionNormConflictsSubMenu.setText("Description of Normative Conflicts");
+        descriptionNormConflictsSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descriptionNormConflictsSubMenuActionPerformed(evt);
+            }
+        });
         aboutMenu.add(descriptionNormConflictsSubMenu);
 
         developersSubMenu.setText("Developers");
+        developersSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                developersSubMenuActionPerformed(evt);
+            }
+        });
         aboutMenu.add(developersSubMenu);
 
         techUsedSubMenu.setText("Technologies Used");
+        techUsedSubMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                techUsedSubMenuActionPerformed(evt);
+            }
+        });
         aboutMenu.add(techUsedSubMenu);
 
         mainMenuBar.add(aboutMenu);
@@ -127,11 +188,11 @@ public class MainEx extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(mainDesktopPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addComponent(mainDesktopPane)
         );
 
         pack();
@@ -139,44 +200,101 @@ public class MainEx extends javax.swing.JFrame {
 
     private void registerActionsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionsSubMenuActionPerformed
         // Create RegisterActionsForm
-        if(registerActionsForm == null) {
+        if (registerActionsForm == null) {
             registerActionsForm = new RegisterActionsForm();
         }
-        registerActionsForm.setVisible(true);
+        centerFrame(registerActionsForm);
     }//GEN-LAST:event_registerActionsSubMenuActionPerformed
 
     private void registerObjectsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerObjectsSubMenuActionPerformed
         // Cretate RegisterObjectForm
-        if(registerObjectForm == null) {
+        if (registerObjectForm == null) {
             registerObjectForm = new RegisterObjectForm();
         }
-        registerObjectForm.setVisible(true);
+        centerFrame(registerObjectForm);
     }//GEN-LAST:event_registerObjectsSubMenuActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // Create AttributeValueForm
-        if(attributeValueForm == null) {
+        if (attributeValueForm == null) {
             attributeValueForm = new AttributeValueForm();
         }
-        attributeValueForm.setVisible(true);
+        centerFrame(attributeValueForm);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void conflictsBNFSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conflictsBNFSubMenuActionPerformed
         // Create BNF form
-        if(bnfNormsForm == null) {
+        if (bnfNormsForm == null) {
             bnfNormsForm = new BNFNormsForm();
         }
-        bnfNormsForm.setVisible(true);
+        centerFrame(bnfNormsForm);
     }//GEN-LAST:event_conflictsBNFSubMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // Create CRUD norms form
-        if(crudNormsForm == null) {
+        if (crudNormsForm == null) {
             crudNormsForm = new CRUDNormsForm();
         }
-        crudNormsForm.setVisible(true);
+        centerFrame(crudNormsForm);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void mainDesktopPaneComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_mainDesktopPaneComponentResized
+        windowHeight = evt.getComponent().getSize().height;
+        windowWidth = evt.getComponent().getSize().width;
+
+        this.sizedImage = image.getScaledInstance(windowWidth, windowHeight, Image.SCALE_DEFAULT);
+        mainDesktopPane.repaint();
+    }//GEN-LAST:event_mainDesktopPaneComponentResized
+
+    private void exampleConflictsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exampleConflictsSubMenuActionPerformed
+        if(exampleConflictForm == null) {
+            exampleConflictForm = new ExampleConflictForm();
+        }
+        centerFrame(exampleConflictForm);
+    }//GEN-LAST:event_exampleConflictsSubMenuActionPerformed
+
+    private void descriptionNormConflictsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descriptionNormConflictsSubMenuActionPerformed
+        if(descriptionForm == null) {
+            descriptionForm = new DescriptionForm();
+        }
+        centerFrame(descriptionForm);
+    }//GEN-LAST:event_descriptionNormConflictsSubMenuActionPerformed
+
+    private void developersSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_developersSubMenuActionPerformed
+        if(developersForm == null) {
+            developersForm = new DevelopersForm();
+        }
+        centerFrame(developersForm);
+    }//GEN-LAST:event_developersSubMenuActionPerformed
+
+    private void techUsedSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_techUsedSubMenuActionPerformed
+        if(technologiesForm == null) {
+            technologiesForm = new TechnologiesForm();
+        }
+        centerFrame(technologiesForm);
+    }//GEN-LAST:event_techUsedSubMenuActionPerformed
+
+    private Image getSizedImage() {
+        return this.sizedImage;
+    }
+
+    private void centerFrame(JFrame frame) {
+        Dimension frameSize = frame.getSize();
+        
+        frame.setLocation((windowWidth - frameSize.width)/2, (windowHeight - frameSize.height) / 2);
+        
+        frame.setVisible(true);
+
+    }
+
+    private ImageIcon icon = new ImageIcon("/home/luccas/Pictures/IntroNorms.png");
+
+    private Image image = icon.getImage();
+
+    private Image sizedImage = image.getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
+
+    private int windowHeight;
+    private int windowWidth;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
@@ -189,6 +307,7 @@ public class MainEx extends javax.swing.JFrame {
     private javax.swing.JMenu initMenu;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JDesktopPane mainDesktopPane;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenuItem registerActionsSubMenu;
     private javax.swing.JMenuItem registerObjectsSubMenu;

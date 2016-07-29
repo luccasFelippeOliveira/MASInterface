@@ -26,6 +26,7 @@ public class RegisterActionsForm extends javax.swing.JFrame {
     public RegisterActionsForm() {
         initComponents();
         listAction = Services.getActionModelList();
+        refreshTable();
     }
 
     /**

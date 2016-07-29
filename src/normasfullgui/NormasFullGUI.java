@@ -6,6 +6,7 @@
 package normasfullgui;
 
 import gui.MainEx;
+import initialization.Init;
 
 
 
@@ -22,6 +23,7 @@ public class NormasFullGUI {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new MainEx().setVisible(true);
             }
         });

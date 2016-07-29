@@ -26,6 +26,7 @@ public class AttributeValueForm extends javax.swing.JFrame {
     public AttributeValueForm() {
         listAttribute = Services.getAttributeModelList();
         initComponents();
+        refreshAttributeTable();
     }
 
     /**

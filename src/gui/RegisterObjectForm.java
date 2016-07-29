@@ -26,6 +26,7 @@ public class RegisterObjectForm extends javax.swing.JFrame {
     public RegisterObjectForm() {
         listObject = Services.getObjectModelList();
         initComponents();
+        refreshTable();
     }
 
     /**
